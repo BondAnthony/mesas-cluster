@@ -24,10 +24,20 @@ resource "digitalocean_droplet" "master_node" {
         timeout         =   "2m"
     }
     
+    provisioner "file" {
+        source          = "files/setup_docker_env.sh"
+        destination     = "/tmp/setup_docker_env.sh" 
+    }
+
     provisioner "remote-exec" {
         inline = [
+            "curl -sSL https://agent.digitalocean.com/install.sh | sh",
             "yum install -y epel-release",
-            "yum update -y"
+            "yum upgrade -y --tolerant",
+            "yum update -y",
+            "chmod 0775 /tmp/setup_docker_env.sh",
+            "/tmp/setup_docker_env.sh",
+            "reboot"
         ]
     }
 }
@@ -51,8 +61,13 @@ resource "digitalocean_droplet" "worker_node" {
     
     provisioner "remote-exec" {
         inline = [
+            "curl -sSL https://agent.digitalocean.com/install.sh | sh",
             "yum install -y epel-release",
-            "yum update -y"
+            "yum upgrade -y --tolerant",
+            "yum update -y",
+            "chmod 0775 /tmp/setup_docker_env.sh",
+            "/tmp/setup_docker_env.sh",
+            "reboot"
         ]
     }
 }
