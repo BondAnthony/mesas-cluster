@@ -1,2 +1,3 @@
-ssh/*
+*.pem
+*.pem.pub
 terraform.tf*

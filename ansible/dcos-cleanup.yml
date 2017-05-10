@@ -1,0 +1,8 @@
+---
+- hosts: "{{ host }}"
+  remote_user: root
+
+  tasks:
+    - file:
+        path: /etc/mesosphere
+        state: absent

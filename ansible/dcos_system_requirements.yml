@@ -1,0 +1,47 @@
+---
+- hosts: "{{ host }}"
+  remote_user: root
+
+  tasks:
+    - name: Setup Digital Ocean Monitoring
+      get_url: 
+        url: https://agent.digitalocean.com/install.sh
+        dest: /tmp/dom_install.sh
+        mode: 0755
+    
+    - shell: /tmp/dom_install.sh
+
+    - yum:
+        name: epel-release
+        state: latest
+    
+    - name: Add Docker Registry
+      yum_repository:
+        name: docker
+        description: Docker Yum repo
+        file: docker.repo
+        baseurl: "https://yum.dockerproject.org/repo/main/centos/{{ ansible_distribution_major_version }}"
+        gpgcheck: yes
+        gpgkey: https://yum.dockerproject.org/gpg
+
+    - yum:
+        name: '*'
+        state: latest
+
+    - name: Install Docker
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items: 
+        - docker-engine-1.13.1
+        - docker-engine-selinux-1.13.1
+    
+    - service:
+        name: docker
+        state: started
+        enabled: yes
+    
+    - service:
+        name: firewalld
+        state: stopped
+        enabled: no
