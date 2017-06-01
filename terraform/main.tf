@@ -85,6 +85,25 @@ resource "digitalocean_droplet" "bootstrap_node" {
     
     provisioner "file" {
         source          = "ssh/mesos.pem"
-        destination     = "~/.ssh/mesos.pem" 
+        destination     = "/root/.ssh/mesos.pem" 
     }
+}
+
+data "template_file" "ansible_inventory" {
+  template = "${file("${path.module}/files/ansible_inventory.tpl")}"
+ vars {
+        dcos_worker_name = "${join("\n",digitalocean_droplet.worker_node.*.name)}",
+        dcos_worker_public = "${join("\n",digitalocean_droplet.worker_node.*.ipv4_address)}",
+        dcos_worker_private = "${join("\n",digitalocean_droplet.worker_node.*.ipv4_address_private)}",
+        dcos_master_name = "${join("\n",digitalocean_droplet.master_node.*.name)}",
+        dcos_master_public = "${join("\n",digitalocean_droplet.master_node.*.ipv4_address)}",
+        dcos_master_private = "${join("\n",digitalocean_droplet.master_node.*.ipv4_address_private)}",
+        dcos_boot_name = "${digitalocean_droplet.bootstrap_node.name}",
+        dcos_boot_public = "${digitalocean_droplet.bootstrap_node.ipv4_address}"
+        dcos_ssh_key = "ansible_ssh_private_key_file=../ssh/mesos.pem"
+    }
+}
+
+output "ansible_inventory" {
+    value = "${data.template_file.ansible_inventory.rendered}"
 }

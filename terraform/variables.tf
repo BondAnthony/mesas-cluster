@@ -19,7 +19,7 @@ variable do_tag {
 
 variable droplet_size {
     description     =   "Droplet Size"
-    default         =   "512mb"
+    default         =   "1gb"
 }
 
 variable bootstrap_node {
@@ -29,10 +29,10 @@ variable bootstrap_node {
 
 variable master_node {
     description     =   "Number of Mesos Master Nodes"
-    default         =   3
+    default         =   1
 }
 
 variable worker_node {
     description     = "Number of  Mesos Worker Nodes"
-    default         = 3
+    default         = 1
 }

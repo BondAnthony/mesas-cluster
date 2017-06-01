@@ -1,8 +1,14 @@
-# mesos-cluster
+# DCOS-Cluster
 
-Quick deployment of a full Mesosphere cluster to Digital Ocean.
+Quick deployment of a full DCOS cluster on Digital Ocean.
 
-You need to create a default ssh key under ./ssh called mesos.pem.
+### Requirements
+
+* You need to create a default ssh key under ./ssh called mesos.pem
+* Terraform needs to be installed on the same system you will be running this project from. [terraform.io](http://www.terraform.io)
+* Ansible also needs to be installed on the same system. [Ansible](http://www.ansible.com)
+
+*You can run this project from your local machine or a VPS*
 
 ## Terraform to Deploy
 
@@ -13,7 +19,7 @@ Use Terraform to build a cluster of servers on Digital Ocean.
 
 ## Ansible to Config
 
-1. Gather list of public and private ip addresses from terraform.tfstate and create an Ansible inventory file.
+1. Generate Ansible inventory file for your deployed cluster `terraform output ansible_inventory > ../ansible/inventory`
 2. Run the Ansible playbook `dcos_system_requirements.yml` to configure docker and shut off firewalld on each host.
 
 ## Bootstrap Node
