@@ -17,6 +17,9 @@ mkdir -p /etc/systemd/system/docker.service.d && tee /etc/systemd/system/docker.
 ExecStart=
 ExecStart=/usr/bin/dockerd --storage-driver=overlay
 EOF
+mkdir -p /etc/systemd/system/docker.service.d && tee /etc/systemd/system/docker.service.d/execstart.conf <<-EOF
+MountFlags=private
+EOF
 else
 echo "Failed to configure docker repo"
 exit 1 

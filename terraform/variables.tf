@@ -4,7 +4,7 @@ variable digital_ocean_key {
 
 variable region {
     description     =   "Datacenter to Launch in"
-    default         =   "nyc2"
+    default         =   "nyc1"
 }
 
 variable image {
@@ -19,7 +19,7 @@ variable do_tag {
 
 variable droplet_size {
     description     =   "Droplet Size"
-    default         =   "1gb"
+    default         =   "512mb"
 }
 
 variable bootstrap_node {
@@ -34,5 +34,5 @@ variable master_node {
 
 variable worker_node {
     description     = "Number of  Mesos Worker Nodes"
-    default         = 1
+    default         = 2
 }

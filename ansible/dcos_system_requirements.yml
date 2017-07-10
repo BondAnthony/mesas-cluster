@@ -1,21 +1,26 @@
 ---
-- hosts: "{{ host }}"
+- hosts: dcos_cluster
   remote_user: root
 
   tasks:
-    - name: Setup Digital Ocean Monitoring
+    - name: download do-agent
       get_url: 
         url: https://agent.digitalocean.com/install.sh
         dest: /tmp/dom_install.sh
         mode: 0755
     
-    - shell: /tmp/dom_install.sh
+    - name: install do-agent
+      shell: /tmp/dom_install.sh
 
-    - yum:
+    - name: mount /tmp in exec mode
+      command: mount -t tmpfs -o remount,exec /tmp
+
+    - name: setup epel-repo and update
+      yum:
         name: epel-release
         state: latest
     
-    - name: Add Docker Registry
+    - name: add docker registry
       yum_repository:
         name: docker
         description: Docker Yum repo
@@ -24,11 +29,12 @@
         gpgcheck: yes
         gpgkey: https://yum.dockerproject.org/gpg
 
-    - yum:
+    - name: yum update
+      yum:
         name: '*'
         state: latest
 
-    - name: Install Docker
+    - name: install docker
       yum:
         name: "{{ item }}"
         state: present
@@ -36,12 +42,42 @@
         - docker-engine-1.13.1
         - docker-engine-selinux-1.13.1
     
-    - service:
+    - name: create docker.service.d
+      file: /etc/systemd/system/docker.service.d
+      state: directory
+      mode: 0755
+
+    - name: add docker specific conf
+      copy:
+        src: "files/{{ item }}"
+        dest: "/etc/systemd/system/docker.service.d/{{ item }}"
+        mode: 0644
+        force: yes
+      with_items:
+        - execstart.conf
+        - override.conf
+    
+    - name: enable/start docker
+      service:
         name: docker
         state: started
         enabled: yes
     
-    - service:
-        name: firewalld
+    - name: disable firewalld/dnsmasq
+      service:
+        name: "{{ item }}"
         state: stopped
         enabled: no
+      with_items:
+        - firewalld
+        - dnsmasq
+
+- hosts: boot_host
+  remote_user: root
+  
+  tasks:
+    - name: download dc/os installer
+      get_url:
+        url: https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh
+        dest: /tmp/dcos_generate_config.sh
+        mode: 0755

@@ -26,7 +26,7 @@ Use Terraform to build a cluster of servers on Digital Ocean.
 
 Terraform will create a bootstrap node to run the DC/OS install gui from.
 
-More infomation so come...
+More infomation to come...
 
 ### Additional Details
 

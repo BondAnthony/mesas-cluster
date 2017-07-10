@@ -1,3 +1,4 @@
 *.pem
 *.pem.pub
 terraform.tf*
+*.retry

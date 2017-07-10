@@ -3,7 +3,7 @@ resource "digitalocean_tag" "do_tag" {
 }
 
 resource "digitalocean_ssh_key" "default" {
-    name            =   "Terraform"
+    name            =   "Terraform1"
     public_key      =   "${file("${path.module}/ssh/mesos.pem.pub")}"
 }
 
@@ -100,7 +100,7 @@ data "template_file" "ansible_inventory" {
         dcos_master_private = "${join("\n",digitalocean_droplet.master_node.*.ipv4_address_private)}",
         dcos_boot_name = "${digitalocean_droplet.bootstrap_node.name}",
         dcos_boot_public = "${digitalocean_droplet.bootstrap_node.ipv4_address}"
-        dcos_ssh_key = "ansible_ssh_private_key_file=../ssh/mesos.pem"
+        dcos_ssh_key = "ansible_ssh_private_key_file=../terraform/ssh/mesos.pem"
     }
 }
 
