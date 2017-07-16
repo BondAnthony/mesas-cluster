@@ -29,7 +29,7 @@ variable bootstrap_node {
 
 variable master_node {
     description     =   "Number of Mesos Master Nodes"
-    default         =   1
+    default         =   3
 }
 
 variable worker_node {
