@@ -23,18 +23,6 @@ resource "digitalocean_droplet" "master_node" {
         user            =   "root"
         timeout         =   "2m"
     }
-    
-    # provisioner "file" {
-    #     source          = "files/setup_docker_env.sh"
-    #     destination     = "/tmp/setup_docker_env.sh" 
-    # }
-
-    # provisioner "remote-exec" {
-    #     inline = [
-    #         "echo overlay > /etc/modules-load.d/overlay.conf",
-    #         "reboot"
-    #     ]
-    # }
 }
 
 resource "digitalocean_droplet" "worker_node" {
@@ -53,17 +41,6 @@ resource "digitalocean_droplet" "worker_node" {
         user            =   "root"
         timeout         =   "2m"
     }
-    # provisioner "file" {
-    #     source          = "files/setup_docker_env.sh"
-    #     destination     = "/tmp/setup_docker_env.sh" 
-    # }
-
-    # provisioner "remote-exec" {
-    #     inline = [
-    #         "echo overlay > /etc/modules-load.d/overlay.conf",
-    #         "reboot"
-    #     ]
-    # }
 }
 
 resource "digitalocean_droplet" "bootstrap_node" {

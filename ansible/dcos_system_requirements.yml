@@ -19,6 +19,18 @@
       yum:
         name: epel-release
         state: latest
+
+    - name: Prereq Packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - tar
+        - xz
+        - unzip
+        - curl
+        - ipset
+        - ntp
     
     - name: add docker registry
       yum_repository:
@@ -33,6 +45,12 @@
       yum:
         name: '*'
         state: latest
+    
+    - name: ntpd
+      service:
+       name: ntpd
+       state: started
+       enabled: yes
 
     # - name: install docker
     #   yum:
@@ -112,3 +130,10 @@
         name: docker
         state: started
         enabled: yes
+
+- hosts: dcos_cluster
+  remote_user: root
+
+  tasks:
+    - name: Reboot server
+      command: /sbin/reboot
