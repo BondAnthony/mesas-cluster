@@ -12,9 +12,6 @@
     - name: install do-agent
       shell: /tmp/dom_install.sh
 
-    # - name: mount /tmp in exec mode
-    #   command: mount -t tmpfs -o remount,exec /tmp
-
     - name: setup epel-repo and update
       yum:
         name: epel-release
@@ -52,36 +49,6 @@
        state: started
        enabled: yes
 
-    # - name: install docker
-    #   yum:
-    #     name: "{{ item }}"
-    #     state: present
-    #   with_items: 
-    #     - docker-engine-1.13.1
-    #     - docker-engine-selinux-1.13.1
-    
-    # - name: create docker.service.d
-    #   file: 
-    #     path: /etc/systemd/system/docker.service.d
-    #     state: directory
-    #     mode: 0755
-
-    # - name: add docker specific conf
-    #   copy:
-    #     src: "files/{{ item }}"
-    #     dest: "/etc/systemd/system/docker.service.d/{{ item }}"
-    #     mode: 0644
-    #     force: yes
-    #   with_items:
-    #     - execstart.conf
-    #     - override.conf
-    
-    # - name: enable/start docker
-    #   service:
-    #     name: docker
-    #     state: started
-    #     enabled: yes
-    
     - name: disable firewalld/dnsmasq
       service:
         name: "{{ item }}"
@@ -136,4 +103,4 @@
 
   tasks:
     - name: Reboot server
-      command: /sbin/reboot
+      command: /sbin/shutdown -r +1

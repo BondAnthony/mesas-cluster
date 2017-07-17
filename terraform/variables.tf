@@ -19,7 +19,7 @@ variable do_tag {
 
 variable droplet_size {
     description     =   "Droplet Size"
-    default         =   "512mb"
+    default         =   "16Gb"
 }
 
 variable bootstrap_node {
